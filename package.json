@@ -2,17 +2,19 @@
   "name": "trpc-example",
   "version": "1.0.0",
   "private": "true",
+  "author": "Gavin King <plumpnation@gmail.com>",
+  "license": "MIT",
   "scripts": {
+    "test": "echo 'No tests implemented yet'",
     "dev:server": "tsx watch packages/server",
-    "dev:client": "wait-port 2022 && tsx watch packages/client",
+    "dev:client": "wait-port 3000 && tsx watch --inspect packages/client",
     "dev": "run-p dev:* --print-label",
     "start": "node dist/server",
     "build": "tsc",
-    "test-dev": "start-server-and-test 'tsx server' 2022 'tsx client'",
-    "test-start": "start-server-and-test 'node dist/server' 2022 'node dist/client'"
+    "test-dev": "start-server-and-test 'tsx packages/server' 3000 'tsx packages/client'",
+    "test-start": "start-server-and-test 'node dist/server' 3000 'node dist/client'",
+    "db-start": "docker-compose up"
   },
-  "author": "Gavin King <plumpnation@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
     "@types/node": "18.11.18",
     "@types/node-fetch": "2.6.2",

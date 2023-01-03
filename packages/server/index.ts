@@ -1,21 +1,24 @@
-import { createHTTPServer } from '@trpc/server/adapters/standalone';
+import express from 'express';
 
-import { router } from './trpc';
-import { userById } from './users/router';
+import { router, createExpressMiddleware, createContext } from './trpc';
+import { userById, userCreate } from './users/user-router';
+
+const app = express();
 
 const appRouter = router({
   userById,
-  // userCreate,
+  userCreate,
 });
 
 export type AppRouter = typeof appRouter;
 
-// Why is this not in the quickstart tutorial?
-createHTTPServer({
+app.use('/trpc', createExpressMiddleware({
   router: appRouter,
-  createContext() {
-    return {};
-  },
-}).listen(2022);
+  createContext,
+}));
 
-console.log('running')
+const port = 3000;
+
+app.listen(port, () => {
+  console.info(`Example app listening on port ${port}`)
+});
