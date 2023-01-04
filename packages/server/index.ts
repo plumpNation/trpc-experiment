@@ -1,24 +1,56 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express'
+import Router from 'express-promise-router'
+import { handleErrorWithStatus } from './common/trpc-errors'
+import { hasStatusCode } from './database/db-helper'
 
-import { router, createExpressMiddleware, createContext } from './trpc';
-import { userById, userCreate } from './users/user-router';
+import { router, createExpressMiddleware, createContext } from './trpc'
+import { userById, userCreate } from './users/user-router'
+import { login } from './auth/auth-router'
 
-const app = express();
+const expressApp = express()
+const expressRouter = Router()
 
-const appRouter = router({
+expressApp.use(expressRouter)
+
+const trpcRouter = router({
+  login,
   userById,
   userCreate,
-});
+})
 
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof trpcRouter
 
-app.use('/trpc', createExpressMiddleware({
-  router: appRouter,
-  createContext,
-}));
+expressRouter.use(
+  '/trpc',
+  createExpressMiddleware({
+    router: trpcRouter,
+    createContext,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onError({ error, type, path, input, ctx, req }) {
+      if (hasStatusCode(error.cause)) {
+        handleErrorWithStatus(error.cause)
 
-const port = 3000;
+        return
+      }
 
-app.listen(port, () => {
-  console.info(`Example app listening on port ${port}`)
-});
+      if (error.code === 'INTERNAL_SERVER_ERROR') {
+        // send to bug reporting
+        // todo log, and remove stack trace.
+        throw error
+      }
+    },
+  }),
+)
+
+expressRouter.use(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(error)
+  },
+)
+
+const port = 3000
+
+expressApp.listen(port, () => {
+  console.info(`Express app listening on port ${port}`)
+})

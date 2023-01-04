@@ -11,11 +11,16 @@ const client = createTRPCProxyClient<AppRouter>({
 });
 
 const run = async () => {
+  let loginResult;
+
   try {
-    const user = await client.userById.query('dnf5gq8o3y0m8tj');
-  } catch (err) {
-    debugger;
+    loginResult = await client.login.query({ username: 'jackie', password: '12345678' })
+    // const user = await client.userById.query('dnf5gq8o3y0m8tj');
+  } catch (err: unknown) {
+    console.error(err);
   }
+
+  console.log(loginResult);
 
   // console.log(user);
 

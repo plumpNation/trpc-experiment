@@ -1,13 +1,21 @@
-import { inferAsyncReturnType, initTRPC } from '@trpc/server';
-import * as trpcExpress from '@trpc/server/adapters/express';
+import { inferAsyncReturnType, initTRPC } from '@trpc/server'
+import * as trpcExpress from '@trpc/server/adapters/express'
 
-export const createContext = ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({});
+export { TRPCError } from '@trpc/server'
 
-export const trpc = initTRPC.context<Context>().create();
+export const createContext = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  req,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  res,
+}: trpcExpress.CreateExpressContextOptions) => ({})
 
-export const publicProcedure = trpc.procedure;
-export const router = trpc.router;
-export const createExpressMiddleware = trpcExpress.createExpressMiddleware;
+export type Context = inferAsyncReturnType<typeof createContext>
 
-export type Context = inferAsyncReturnType<typeof createContext>;
-export type TRPC = typeof trpc;
+export const trpc = initTRPC.context<Context>().create()
+
+export const publicProcedure = trpc.procedure
+export const router = trpc.router
+export const createExpressMiddleware = trpcExpress.createExpressMiddleware
+
+export type TRPC = typeof trpc
