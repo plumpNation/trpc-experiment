@@ -6,16 +6,14 @@ export const handleErrorWithStatus = (error: HasStatusCode): never => {
     case 404: {
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'Resource could not be found',
-        cause: error, // optional
+        message: 'Not found',
       })
     }
 
     case 400: {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
-        message: error.message || 'Unauthorized',
-        cause: error, // optional
+        message: 'Unauthorized',
       })
     }
   }

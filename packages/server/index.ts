@@ -4,7 +4,11 @@ import { handleErrorWithStatus } from './common/trpc-errors'
 import { hasStatusCode } from './database/db-helper'
 
 import { router, createExpressMiddleware, createContext } from './trpc'
-import { userById, userCreate } from './users/user-router'
+import {
+  userById,
+  userCreate,
+  userByUsernameOrEmail,
+} from './users/user-router'
 import { login } from './auth/auth-router'
 
 const expressApp = express()
@@ -16,6 +20,7 @@ const trpcRouter = router({
   login,
   userById,
   userCreate,
+  userByUsernameOrEmail,
 })
 
 export type AppRouter = typeof trpcRouter

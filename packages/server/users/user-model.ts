@@ -1,22 +1,47 @@
 import { db } from '../database'
 
+import type { LoginSchema, SignupSchema } from '../auth/auth-validators'
+
 const users = db.collection('users')
 
-export interface SignupUser {
-  name: string
-  username: string
-  email: string
-}
-
-export interface User extends SignupUser {
+export interface User extends LoginSchema {
   id: string
   created: Date
   updated: Date
 }
 
 export const findUsers = () => users.getFullList<User[]>()
+
 export const findUserById = (id: string) => users.getOne<User>(id)
-export const findUserByUsername = (username: string) =>
-  users.getFirstListItem<User>(`username = ${username}`)
-export const createUser = (user: SignupUser) => users.create<User>(user)
-export const deleteUser = (id: string) => users.delete(id)
+
+export const findUserByUsername = async (
+  username: string,
+): Promise<User | undefined> =>
+  (await users.getList<User>(1, 1, { filter: `username = '${username}'` }))
+    .items[0]
+
+export const findUserByEmail = async (
+  email: string,
+): Promise<User | undefined> =>
+  (await users.getList<User>(1, 1, { filter: `email = '${email}'` })).items[0]
+
+export const findUserByUsernameOrEmail = async (
+  username: string,
+): Promise<User | undefined> =>
+  (
+    await users.getList<User>(1, 1, {
+      filter: `username = '${username}' || email = '${username}'`,
+    })
+  ).items[0]
+
+export const createUser = (user: SignupSchema) => users.create<User>(user)
+
+export const deleteUser = async (id: string) => {
+  try {
+    findUserById(id)
+  } catch (err) {
+    return true
+  }
+
+  return users.delete(id)
+}
