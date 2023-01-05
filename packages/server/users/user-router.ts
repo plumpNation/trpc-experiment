@@ -14,11 +14,34 @@ import {
 
 export const userById = publicProcedure
   .input(zod.string())
-  .query(async ({ input }) => findUserById(input))
+  .query(async ({ input }) => {
+    const user = await findUserById(input)
 
+    if (user) {
+      return user
+    }
+
+    throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found by id' })
+  })
+
+/**
+ * Provide either a username or email, and if it matches an
+ * existing user with that username or email, that user will be returned.
+ */
 export const userByUsernameOrEmail = publicProcedure
   .input(zod.string().email())
-  .query(({ input }) => findUserByUsernameOrEmail(input))
+  .query(async ({ input }) => {
+    const user = await findUserByUsernameOrEmail(input)
+
+    if (user) {
+      return user
+    }
+
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'User not found by username or email',
+    })
+  })
 
 export const userCreate = publicProcedure
   .input(signUpSchema)
@@ -28,10 +51,17 @@ export const userCreate = publicProcedure
       findUserByUsername(input.username),
     ])
 
-    if (userWithEmail || userWithUsername) {
+    if (userWithEmail) {
       throw new TRPCError({
         code: 'CONFLICT',
-        message: 'Username or email already taken',
+        message: 'Email already taken',
+      })
+    }
+
+    if (userWithUsername) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: 'Username already taken',
       })
     }
 

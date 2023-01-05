@@ -12,7 +12,8 @@ export interface User extends LoginSchema {
 
 export const findUsers = () => users.getFullList<User[]>()
 
-export const findUserById = (id: string) => users.getOne<User>(id)
+export const findUserById = async (id: string): Promise<User | undefined> =>
+  (await users.getList<User>(1, 1, { filter: `id = '${id}'` })).items[0]
 
 export const findUserByUsername = async (
   username: string,

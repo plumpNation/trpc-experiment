@@ -21,7 +21,7 @@ const run = async () => {
 
   try {
     const createdUser = await client.userCreate.mutate({
-      username: 'jimbob',
+      username: 'jimbobs',
       email: 'jimmy@example.com',
       password: '567891234',
       passwordConfirm: '567891234',

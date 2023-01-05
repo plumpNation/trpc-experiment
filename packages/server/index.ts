@@ -1,7 +1,5 @@
-import express, { NextFunction, Request, Response } from 'express'
+import express from 'express'
 import Router from 'express-promise-router'
-import { handleErrorWithStatus } from './common/trpc-errors'
-import { hasStatusCode } from './database/db-helper'
 
 import { router, createExpressMiddleware, createContext } from './trpc'
 import {
@@ -30,28 +28,7 @@ expressRouter.use(
   createExpressMiddleware({
     router: trpcRouter,
     createContext,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onError({ error, type, path, input, ctx, req }) {
-      if (hasStatusCode(error.cause)) {
-        handleErrorWithStatus(error.cause)
-
-        return
-      }
-
-      if (error.code === 'INTERNAL_SERVER_ERROR') {
-        // send to bug reporting
-        // todo log, and remove stack trace.
-        throw error
-      }
-    },
   }),
-)
-
-expressRouter.use(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(error)
-  },
 )
 
 const port = 3000
