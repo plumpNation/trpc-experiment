@@ -4,6 +4,10 @@
   "author": "Gavin King <plumpnation@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@trpc/client": "10.7.0"
+    "@redux-devtools/extension": "^3.2.5",
+    "@reduxjs/toolkit": "1.9.2",
+    "@trpc/client": "10.10.0",
+    "@trpc/server": "^10.10.0",
+    "redux": "4.2.1"
   }
 }
