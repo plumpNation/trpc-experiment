@@ -5,6 +5,7 @@ import { router, createExpressMiddleware, createContext } from './trpc'
 import {
   userById,
   userCreate,
+  users,
   userByUsernameOrEmail,
 } from './users/user-router'
 import { login } from './auth/auth-router'
@@ -17,6 +18,7 @@ expressApp.use(expressRouter)
 const trpcRouter = router({
   login,
   userById,
+  users,
   userCreate,
   userByUsernameOrEmail,
 })

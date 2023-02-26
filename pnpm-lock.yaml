@@ -50,12 +50,14 @@ importers:
       '@trpc/client': 10.10.0
       '@trpc/server': ^10.10.0
       redux: 4.2.1
+      redux-devtools-extension: ^2.13.9
     dependencies:
       '@redux-devtools/extension': 3.2.5_redux@4.2.1
       '@reduxjs/toolkit': 1.9.2
       '@trpc/client': 10.10.0_@trpc+server@10.10.0
       '@trpc/server': 10.10.0
       redux: 4.2.1
+      redux-devtools-extension: 2.13.9_redux@4.2.1
 
   packages/server:
     specifiers:
@@ -2259,6 +2261,15 @@ packages:
       normalize-package-data: 2.5.0
       path-type: 3.0.0
     dev: true
+
+  /redux-devtools-extension/2.13.9_redux@4.2.1:
+    resolution: {integrity: sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==}
+    deprecated: Package moved to @redux-devtools/extension.
+    peerDependencies:
+      redux: ^3.1.0 || ^4.0.0
+    dependencies:
+      redux: 4.2.1
+    dev: false
 
   /redux-thunk/2.4.2_redux@4.2.1:
     resolution: {integrity: sha512-+P3TjtnP0k/FEjcBL5FZpoovtvrTNT/UXd4/sluaSyrURlSlhLSzEdfsTBW7WsKB6yPvgd7q/iZPICFjW4o57Q==}

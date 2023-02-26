@@ -8,6 +8,7 @@
     "@reduxjs/toolkit": "1.9.2",
     "@trpc/client": "10.10.0",
     "@trpc/server": "^10.10.0",
-    "redux": "4.2.1"
+    "redux": "4.2.1",
+    "redux-devtools-extension": "^2.13.9"
   }
 }
